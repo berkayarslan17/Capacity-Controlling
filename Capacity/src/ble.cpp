@@ -12,7 +12,7 @@ class MyAdvertisedDeviceCallbacks : public BLEAdvertisedDeviceCallbacks
     //Beacon *Indicator;
     //pMAC_Address = new BLEAddress(advertisedDevice.getAddress());
 
-    if (strcmp(advertisedDevice.getAddress().toString().c_str(), "40:ed:98:a5:5e:d1") == 0)
+    if (strcmp(advertisedDevice.getAddress().toString().c_str(), "ff:06:22:b0:03:f6") == 0)
     {
       int raw_rssi_val = advertisedDevice.getRSSI();
       static unsigned int index = 0;

@@ -8,11 +8,15 @@ lcd_manager::lcd_manager()
 {
   beacon_idx = 0;
 
+  Serial.println("Debug 1");
   lcd.begin();
+  Serial.println("Debug 2");
   lcd.backlight();
-  lcd.print("Starting...");
-  delay(1000);
+  Serial.println("Debug 3");
+  lcd.home();
+  delay(100);
   idle_screen();
+  Serial.println("Debug 4");
 }
 
 lcd_manager::~lcd_manager()
@@ -21,16 +25,18 @@ lcd_manager::~lcd_manager()
 
 void lcd_manager::idle_screen()
 {
+  delay(100);
   lcd.clear();
   lcd.print("Capacity Control");
   lcd.setCursor(0, 1);
-  lcd.print("    System");
+  lcd.print("System");
 }
 
 void lcd_manager::tracking_screen()
 {
-  Serial.println("In tracking screen");
+  delay(100);
   lcd.clear();
+  lcd.print("Tracking:");
   lcd.setCursor(0, 1);
   lcd.print(beacon_idx);
   lcd.print("/");
@@ -39,6 +45,7 @@ void lcd_manager::tracking_screen()
 
 void lcd_manager::alarm_screen()
 {
+  delay(100);
   lcd.clear();
   lcd.print("!!!ALARM!!!");
   lcd.setCursor(0, 1);

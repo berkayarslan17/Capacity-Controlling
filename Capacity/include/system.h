@@ -12,7 +12,8 @@ public:
     static system_manager *get_instance();
     static int range;
     static int max_device;
-    static SemaphoreHandle_t ble_sem;
+    static TaskHandle_t ble_task_handle;
+    static SemaphoreHandle_t lcd_sem;
 
     system_manager();
     ~system_manager();
@@ -24,8 +25,6 @@ public:
         // SETUP BLE
         ble_scanner_setup();
 
-        // Take the ble semaphore
-        xSemaphoreTake(system_manager::ble_sem);
         Serial.println("Start ble activity");
         for (;;)
         {
@@ -52,13 +51,13 @@ public:
     /*  @TODO: get the max_device variable, if the beacon_list index is bigger
      *         than the max_device, trigger the alarm.
      */
-    static void alarm_task(void *argp)
-    {
-        Serial.println("Starting alarm task...");
-        for (;;)
-        {
-        }
-    }
+    // static void alarm_task(void *argp)
+    // {
+    //     Serial.println("Starting alarm task...");
+    //     for (;;)
+    //     {
+    //     }
+    // }
 
     /** @brief LCD Task Manager
     /*
@@ -70,11 +69,15 @@ public:
 
         for (;;)
         {
+            xSemaphoreTake(system_manager::lcd_sem, portMAX_DELAY);
+            Serial.println("Take the semaphore");
+
             for (int i = 0; i < command_queue.size(); i++)
             {
                 Serial.println("Execute command...");
                 command_queue[i]->execute(screen);
             }
+
             command_queue.clear();
         }
     }
@@ -82,6 +85,8 @@ public:
     static void add_command_queue(Command *cmd)
     {
         command_queue.push_back(cmd);
+        xSemaphoreGive(system_manager::lcd_sem);
+        Serial.println("Give the semaphore");
     }
 
 private:

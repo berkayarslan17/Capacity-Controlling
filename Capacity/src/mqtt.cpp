@@ -6,6 +6,8 @@ PubSubClient mqttClient(ubidots);
 void reconnectToTheBroker(void)
 {
     int numberOfConnectionsTried = 0;
+    vTaskSuspend(system_manager::ble_task_handle);
+    Serial.println("Suspend ble task");
     while (!mqttClient.connected())
     {
         Serial.println("Reconnecting to MQTT Broker..");
@@ -15,12 +17,8 @@ void reconnectToTheBroker(void)
             // subscribe to topic
             mqttClient.subscribe("/v1.6/devices/capacity/max-device/lv");
             mqttClient.subscribe("/v1.6/devices/capacity/range/lv");
-
-            TrackingCommand *cmd = new TrackingCommand;
-            system_manager::add_command_queue(cmd);
-
-            // Give the ble semaphore to start ble activity
-            xSemaphoreGive(system_manager::ble_sem);
+            vTaskResume(system_manager::ble_task_handle);
+            Serial.println("Resume ble task");
         }
         else
         {
@@ -61,15 +59,17 @@ void callback(char *topic, byte *payload, unsigned int length)
 
     if (strcmp(topic, "/v1.6/devices/capacity/max-device/lv") == 0)
     {
-        // TODO: Max device değerini tutacak bir variable olustur
         // Bu variable'ın scope'unun ble.h'ı kapsaması lazım
         system_manager::max_device = atoi(message_temp);
         Serial.println(system_manager::max_device);
+
+        // Refresh max device
+        TrackingCommand *cmd = new TrackingCommand;
+        system_manager::add_command_queue(cmd);
     }
 
     else if (strcmp(topic, "/v1.6/devices/capacity/range/lv") == 0)
     {
-        // TODO: Range değerini tutacak bir variable olustur
         // Bu variable'ın scope'unun ble.h'ı kapsaması lazım
         system_manager::range = atoi(message_temp);
         system_manager::range *= -1;

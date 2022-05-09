@@ -9,7 +9,6 @@ Beacon::Beacon()
   filtered_rssi_val = 0;
   memset(rssi_buffer, 0, sizeof(rssi_buffer) / sizeof(rssi_buffer[0]));
   state = BEACON_STATE_INITIAL;
-  write_lcd = false;
 }
 
 Beacon::Beacon(const char *device_addr)
@@ -89,10 +88,10 @@ void Beacon::beacon_dispatch(event_t *evt)
     // If the beacon is inside, switch to IN_RANGE state
     case BEACON_SIG_IN_RANGE:
     {
-
       state = BEACON_STATE_IN;
       CntUpCommand *cmd = new CntUpCommand;
       system_manager::add_command_queue(cmd);
+      Serial.println("State Initial - In Range");
       break;
     }
 
@@ -100,6 +99,7 @@ void Beacon::beacon_dispatch(event_t *evt)
     case BEACON_SIG_OUT_RANGE:
     {
       state = BEACON_STATE_OUT;
+      Serial.println("State Initial - Out Range");
       break;
     }
     default:
@@ -126,9 +126,10 @@ void Beacon::beacon_dispatch(event_t *evt)
     case BEACON_SIG_OUT_RANGE:
     {
       state = BEACON_STATE_OUT;
-      // Make LCD counter down 
+      // Make LCD counter down
       CntDownCommand *cmd = new CntDownCommand;
       system_manager::add_command_queue(cmd);
+      Serial.println("State IN - Out Range");
       break;
     }
 
@@ -149,9 +150,10 @@ void Beacon::beacon_dispatch(event_t *evt)
     case BEACON_SIG_IN_RANGE:
     {
       state = BEACON_STATE_IN;
-      // Make LCD counter up 
+      // Make LCD counter up
       CntUpCommand *cmd = new CntUpCommand;
       system_manager::add_command_queue(cmd);
+      Serial.println("State OUT - IN Range");
       break;
     }
 

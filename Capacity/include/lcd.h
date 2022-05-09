@@ -38,6 +38,7 @@ class IdleCommand : public Command
 public:
     virtual void execute(lcd_manager &screen)
     {
+        Serial.println("IDLE Screen");
         screen.idle_screen();
     }
 };
@@ -47,6 +48,7 @@ class TrackingCommand : public Command
 public:
     virtual void execute(lcd_manager &screen)
     {
+        Serial.println("Tracking Screen");
         screen.tracking_screen();
     }
 };
@@ -56,6 +58,7 @@ class AlarmCommand : public Command
 public:
     virtual void execute(lcd_manager &screen)
     {
+        Serial.println("Alarm Screen");
         screen.alarm_screen();
     }
 };
@@ -65,6 +68,7 @@ class CntUpCommand : public Command
 public:
     virtual void execute(lcd_manager &screen)
     {
+        Serial.println("CNT Up Screen");
         screen.counter_up();
     }
 };
@@ -74,6 +78,7 @@ class CntDownCommand : public Command
 public:
     virtual void execute(lcd_manager &screen)
     {
+        Serial.println("CNT Down Screen");
         screen.counter_down();
     }
 };

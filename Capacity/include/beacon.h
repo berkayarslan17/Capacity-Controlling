@@ -48,7 +48,6 @@ public:
   int filtered_rssi_val;
   int rssi_val;
   beacon_state_t state;
-  bool write_lcd;
 
   // Constructors and destructor
   Beacon();                     // Default constructor
