@@ -28,26 +28,28 @@ void Beacon::save_rssi_val(int raw_rssi_val)
   rssi_val = raw_rssi_val;
 
   // Save the value and increase the index
-  rssi_buffer[circ_idx] = raw_rssi_val;
+  rssi_buffer[BEACON_UNIT - 1] = raw_rssi_val;
 
-  circ_idx = (circ_idx + 1) % 5;
-  norm_idx++;
-
-  if (norm_idx <= 5)
+  Serial.println();
+  for (size_t i = 0; i < BEACON_UNIT - 1; i++)
   {
-    /*** MOVING AVERAGE FILTER ***/
-    filtered_rssi_val = mov_average_filter(rssi_buffer, norm_idx);
+    rssi_buffer[i] = rssi_buffer[i + 1];
+    Serial.print(rssi_buffer[i]);
   }
 
+  Serial.print(rssi_buffer[BEACON_UNIT - 1]);
+
+  if (norm_idx < BEACON_UNIT)
+  {
+    filtered_rssi_val = raw_rssi_val;
+    norm_idx++;
+  }
   else
   {
-    filtered_rssi_val = mov_average_filter(rssi_buffer, BEACON_UNIT);
+    filtered_rssi_val = weighted_mov_average_filter(rssi_buffer, BEACON_UNIT);
   }
 
   check_beacon_range();
-
-  // Check the filtered rssi value, if it is in the range, make the counter
-  // up for indicating in the LCD screen
 }
 
 void Beacon::save_device_addr(const char *device_addr)
