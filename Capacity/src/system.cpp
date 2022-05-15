@@ -12,6 +12,9 @@ system_manager::system_manager()
 {
     lcd_sem = xSemaphoreCreateBinary();
 
+    pinMode(BUZZER_PIN, OUTPUT);
+    digitalWrite(BUZZER_PIN, HIGH); // turn buzzer off
+
     rc = xTaskCreatePinnedToCore(
         ble_task,
         "ble_task",
@@ -28,29 +31,18 @@ system_manager::system_manager()
         "mqtt_task",
         10000, // Stack Size
         nullptr,
-        2,       // Priority
+        3,       // Priority
         nullptr, // Task Handle
         1        // CPU
     );
     assert(rc == pdPASS);
-
-    // rc = xTaskCreatePinnedToCore(
-    //     alarm_task,
-    //     "alarm_task",
-    //     1000, // Stack Size
-    //     nullptr,
-    //     1,       // Priortiy
-    //     nullptr, // Task Handle
-    //     1        // CPU
-    // );
-    // assert(rc == pdPASS);
 
     rc = xTaskCreatePinnedToCore(
         lcd_task,
         "lcd_task",
         5000, // Stack Size
         nullptr,
-        3,       // Priortiy
+        4,       // Priortiy
         nullptr, // Task Handle
         1        // CPU
     );

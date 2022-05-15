@@ -5,6 +5,7 @@
 #include "ble.h"
 #include "mqtt.h"
 #include "lcd.h"
+#include "buzzer.h"
 
 class system_manager
 {
@@ -46,18 +47,6 @@ public:
             mqtt_loop();
         }
     }
-
-    /** @brief Alarm Task Manager
-    /*  @TODO: get the max_device variable, if the beacon_list index is bigger
-     *         than the max_device, trigger the alarm.
-     */
-    // static void alarm_task(void *argp)
-    // {
-    //     Serial.println("Starting alarm task...");
-    //     for (;;)
-    //     {
-    //     }
-    // }
 
     /** @brief LCD Task Manager
     /*

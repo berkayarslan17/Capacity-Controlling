@@ -4,6 +4,20 @@
 
 LiquidCrystal_I2C lcd(LCD_I2C_ADDRESS, LCD_SCREEN_WIDTH, LCD_SCREEN_HEIGHT);
 
+static void control_alarm(int beacon_idx)
+{
+  if (system_manager::max_device <= beacon_idx)
+  {
+    Serial.println("flag true");
+    digitalWrite(BUZZER_PIN, LOW); // turn buzzer on
+  }
+  else
+  {
+    Serial.println("flag false");
+    digitalWrite(BUZZER_PIN, HIGH); // turn buzzer off
+  }
+}
+
 lcd_manager::lcd_manager()
 {
   beacon_idx = 0;
@@ -56,10 +70,16 @@ void lcd_manager::counter_up()
 {
   beacon_idx++;
   tracking_screen();
+  Serial.print("beacon_idx = ");
+  Serial.print(beacon_idx);
+  Serial.println("max_device = ");
+  Serial.print(system_manager::max_device);
+  control_alarm(beacon_idx);
 }
 
 void lcd_manager::counter_down()
 {
   beacon_idx--;
   tracking_screen();
+  control_alarm(beacon_idx);
 }
