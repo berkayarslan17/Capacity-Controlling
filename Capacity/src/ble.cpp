@@ -1,18 +1,31 @@
 #include "system.h"
 
-// std::vector<Beacon> beacon_list;
 Beacon beacon_list[BEACON_UNIT];
 BLEScan *pBLEScan;
-// BLEAddress *pMAC_Address;
+// TODO: Change the MAC Adresses
+const char mac_addr_table[BEACON_UNIT][18] = {{"40:ed:98:ee:aa:32"},
+                                              {"40:ed:98:ec:aa:32"},
+                                              {"40:ed:98:ee:aa:32"},
+                                              {"40:ed:98:ee:aa:32"},
+                                              {"40:ed:98:ee:aa:32"}};
+
+static bool check_beacon_list(const char *mac_addr)
+{
+    for (size_t i = 0; i < BEACON_UNIT; i++)
+    {
+        if(!strcmp(mac_addr_table[i], mac_addr))
+        {
+            return true;
+        }
+    }
+    return false;
+}
 
 class MyAdvertisedDeviceCallbacks : public BLEAdvertisedDeviceCallbacks
 {
   void onResult(BLEAdvertisedDevice advertisedDevice)
   {
-    // Beacon *Indicator;
-    // pMAC_Address = new BLEAddress(advertisedDevice.getAddress());
-
-    if (strcmp(advertisedDevice.getAddress().toString().c_str(), "40:ed:98:a5:5e:d1") == 0)
+    if (check_beacon_list(advertisedDevice.getAddress().toString().c_str()))
     {
       int raw_rssi_val = advertisedDevice.getRSSI();
       static unsigned int index = 0;
