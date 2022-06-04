@@ -2,23 +2,21 @@
 
 Beacon beacon_list[BEACON_UNIT];
 BLEScan *pBLEScan;
-// TODO: Change the MAC Adresses
-const char mac_addr_table[BEACON_UNIT][18] = {{"40:ed:98:ee:aa:32"},
-                                              {"40:ed:98:ec:aa:32"},
-                                              {"40:ed:98:ee:aa:32"},
-                                              {"40:ed:98:ee:aa:32"},
-                                              {"40:ed:98:ee:aa:32"}};
+const char mac_addr_table[BEACON_UNIT][18] = {{"40:ed:98:a5:5e:d1"},
+                                              {"ff:06:22:b0:03:f6"},
+                                              {"40:ed:98:aa:55:ed"},
+                                              {"84:71:27:25:0e:38"}};
 
 static bool check_beacon_list(const char *mac_addr)
 {
-    for (size_t i = 0; i < BEACON_UNIT; i++)
+  for (size_t i = 0; i < BEACON_UNIT; i++)
+  {
+    if (!strcmp(mac_addr_table[i], mac_addr))
     {
-        if(!strcmp(mac_addr_table[i], mac_addr))
-        {
-            return true;
-        }
+      return true;
     }
-    return false;
+  }
+  return false;
 }
 
 class MyAdvertisedDeviceCallbacks : public BLEAdvertisedDeviceCallbacks
