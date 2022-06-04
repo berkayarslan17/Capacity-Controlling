@@ -17,8 +17,8 @@ void reconnectToTheBroker(void)
             mqttClient.subscribe("/v1.6/devices/capacity/range/lv");
             vTaskResume(system_manager::ble_task_handle);
             Serial.println("Resume ble task");
-            vTaskResume(system_manager::lcd_task_handle);
-            Serial.println("Resume ble task");
+            // vTaskResume(system_manager::lcd_task_handle);
+            // Serial.println("Resume ble task");
         }
         else
         {
