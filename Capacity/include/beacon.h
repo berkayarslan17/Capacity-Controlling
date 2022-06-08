@@ -15,6 +15,11 @@ typedef enum beacon_signals
   /** @brief BEACON_SIG_OUT_RANGE  -> Signal that indicates the beacon is outside the range.
    */
   BEACON_SIG_OUT_RANGE,
+  /**
+   * @brief
+   *
+   */
+  BEACON_SIG_TIMEOUT,
 } beacon_sig_t;
 
 typedef enum beacon_states
@@ -48,6 +53,7 @@ public:
   int filtered_rssi_val;
   int rssi_val;
   beacon_state_t state;
+  TimerHandle_t timer;
 
   // Constructors and destructor
   Beacon();                     // Default constructor
