@@ -7,6 +7,27 @@ const char mac_addr_table[BEACON_UNIT][18] = {{"40:ed:98:a5:5e:d1"},
                                               {"40:ed:98:aa:55:ed"},
                                               {"84:71:27:25:0e:38"}};
 
+// TODO: Consider returning beacon*
+int find_beacon_by_timer(TimerHandle_t xTimer)
+{
+  for (int index = 0; index < BEACON_UNIT; index++)
+  {
+    if (beacon_list[index].timer == xTimer)
+    {
+      return index;
+    }
+    }
+  return -1;
+}
+
+extern void v_timer_callback(TimerHandle_t xTimer)
+{
+  int index = find_beacon_by_timer(xTimer);
+  Serial.println("Timer Callback");
+  event_t evt = {.sig = BEACON_SIG_TIMEOUT};
+  beacon_list[index].beacon_dispatch(&evt);
+}
+
 static bool check_beacon_list(const char *mac_addr)
 {
   for (size_t i = 0; i < BEACON_UNIT; i++)
