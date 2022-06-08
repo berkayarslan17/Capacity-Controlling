@@ -6,7 +6,6 @@ std::vector<Command *> system_manager::command_queue;
 int system_manager::max_device = 0;
 int system_manager::range = 0;
 TaskHandle_t system_manager::ble_task_handle = NULL;
-// TaskHandle_t system_manager::lcd_task_handle = NULL;
 SemaphoreHandle_t system_manager::lcd_sem;
 
 system_manager::system_manager()
@@ -21,7 +20,7 @@ system_manager::system_manager()
         "ble_task",
         10000, // Stack Size
         nullptr,
-        2,                // Priortiy
+        3,                // Priortiy
         &ble_task_handle, // Task Handle
         1                 // CPU
     );
@@ -35,7 +34,7 @@ system_manager::system_manager()
         "mqtt_task",
         10000, // Stack Size
         nullptr,
-        3,       // Priority
+        2,       // Priority
         nullptr, // Task Handle
         1        // CPU
     );
@@ -48,12 +47,9 @@ system_manager::system_manager()
         nullptr,
         4,    // Priortiy
         NULL, // Task Handle
-        1     // CPU
+        0     // CPU
     );
     assert(rc == pdPASS);
-
-    // vTaskSuspend(lcd_task_handle);
-    // Serial.println("Suspend ble task");
 }
 
 system_manager::~system_manager()
