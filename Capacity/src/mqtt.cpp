@@ -6,8 +6,6 @@ PubSubClient mqttClient(ubidots);
 void reconnectToTheBroker(void)
 {
     int numberOfConnectionsTried = 0;
-    vTaskSuspend(system_manager::ble_task_handle);
-    Serial.println("Suspend ble task");
     while (!mqttClient.connected())
     {
         Serial.println("Reconnecting to MQTT Broker..");
@@ -19,6 +17,8 @@ void reconnectToTheBroker(void)
             mqttClient.subscribe("/v1.6/devices/capacity/range/lv");
             vTaskResume(system_manager::ble_task_handle);
             Serial.println("Resume ble task");
+            // vTaskResume(system_manager::lcd_task_handle);
+            // Serial.println("Resume ble task");
         }
         else
         {
@@ -59,7 +59,6 @@ void callback(char *topic, byte *payload, unsigned int length)
 
     if (strcmp(topic, "/v1.6/devices/capacity/max-device/lv") == 0)
     {
-        // Bu variable'ın scope'unun ble.h'ı kapsaması lazım
         system_manager::max_device = atoi(message_temp);
         Serial.println(system_manager::max_device);
 
@@ -70,7 +69,6 @@ void callback(char *topic, byte *payload, unsigned int length)
 
     else if (strcmp(topic, "/v1.6/devices/capacity/range/lv") == 0)
     {
-        // Bu variable'ın scope'unun ble.h'ı kapsaması lazım
         system_manager::range = atoi(message_temp);
         system_manager::range *= -1;
         Serial.println(system_manager::range);

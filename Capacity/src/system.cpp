@@ -20,18 +20,21 @@ system_manager::system_manager()
         "ble_task",
         10000, // Stack Size
         nullptr,
-        2,                // Priortiy
+        3,                // Priortiy
         &ble_task_handle, // Task Handle
         1                 // CPU
     );
     assert(rc == pdPASS);
+
+    vTaskSuspend(ble_task_handle);
+    Serial.println("Suspend ble task");
 
     rc = xTaskCreatePinnedToCore(
         mqtt_task,
         "mqtt_task",
         10000, // Stack Size
         nullptr,
-        3,       // Priority
+        2,       // Priority
         nullptr, // Task Handle
         1        // CPU
     );
@@ -42,9 +45,9 @@ system_manager::system_manager()
         "lcd_task",
         5000, // Stack Size
         nullptr,
-        4,       // Priortiy
-        nullptr, // Task Handle
-        1        // CPU
+        4,    // Priortiy
+        NULL, // Task Handle
+        0     // CPU
     );
     assert(rc == pdPASS);
 }

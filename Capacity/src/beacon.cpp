@@ -2,6 +2,8 @@
 #include "beacon.h"
 #include "system.h"
 
+void v_timer_callback(TimerHandle_t xTimer);
+
 Beacon::Beacon()
 {
   // mac_addr = "";
@@ -9,6 +11,12 @@ Beacon::Beacon()
   filtered_rssi_val = 0;
   memset(rssi_buffer, 0, sizeof(rssi_buffer) / sizeof(rssi_buffer[0]));
   state = BEACON_STATE_INITIAL;
+  timer = xTimerCreate(
+      "Timer",
+      pdMS_TO_TICKS(10000),
+      pdFALSE,
+      (void *)0,
+      v_timer_callback);
 }
 
 Beacon::Beacon(const char *device_addr)
@@ -121,10 +129,12 @@ void Beacon::beacon_dispatch(event_t *evt)
     case BEACON_SIG_IN_RANGE:
     {
       // Do nothing
+      xTimerStart(timer, 0);
       break;
     }
 
     // If the beacon is outside, switch to OUT_RANGE state
+    case BEACON_SIG_TIMEOUT:
     case BEACON_SIG_OUT_RANGE:
     {
       state = BEACON_STATE_OUT;

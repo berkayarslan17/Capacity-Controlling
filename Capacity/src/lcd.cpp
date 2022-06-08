@@ -6,7 +6,7 @@ LiquidCrystal_I2C lcd(LCD_I2C_ADDRESS, LCD_SCREEN_WIDTH, LCD_SCREEN_HEIGHT);
 
 static bool control_alarm(int beacon_idx)
 {
-  if (system_manager::max_device <= beacon_idx)
+  if (system_manager::max_device < beacon_idx)
   {
     Serial.println("flag true");
     digitalWrite(BUZZER_PIN, LOW); // turn buzzer on

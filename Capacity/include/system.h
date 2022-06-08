@@ -14,6 +14,7 @@ public:
     static int range;
     static int max_device;
     static TaskHandle_t ble_task_handle;
+    // static TaskHandle_t lcd_task_handle;
     static SemaphoreHandle_t lcd_sem;
 
     system_manager();
