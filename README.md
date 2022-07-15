@@ -50,8 +50,11 @@ Maximum device data is the data that takes a value between [1,5] and tells how m
 ### Range Topic
 The range data takes a value between [-50, -100] and compares the signal from the beacon with its own data and allows the system to decide whether the beacon is in the room or not.
 
+**Web Control Panel**
 ![resim](https://user-images.githubusercontent.com/44584158/179207204-3ff210f9-aa0e-424e-b11e-c60fc9add0a0.png)
 
+
+**Mobile Control Panel**
 ![resim](https://user-images.githubusercontent.com/44584158/179207254-84890502-7e95-4466-8a5b-ec1a3d31589a.png)
 
 ## Conclusion
